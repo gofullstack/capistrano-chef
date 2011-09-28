@@ -24,7 +24,13 @@ Using capistrano-chef, you can do this:
 
 This defines the same roles using Chef's [search feature](http://wiki.opscode.com/display/chef/Search). Nodes are searched using the given query. The node's `ipaddress` attribute is used by default, but another (top-level) attribute can be specified in the options. The rest of the options are the same as those used by Capistrano.
 
-Chef configuration options are loaded by [Knife](http://wiki.opscode.com/display/chef/Knifehttp://wiki.opscode.com/display/chef/Knife), looking for `.chef/knife.rb` in the current directory or one its parent directories.
+Chef configuration options are loaded by [Knife](http://wiki.opscode.com/display/chef/Knifehttp://wiki.opscode.com/display/chef/Knife), looking for `.chef/knife.rb` in the current directory or one its parent directories. 
+
+To generate this file, run the following from the root of your project:  
+
+    $ knife configure -i 
+
+
 
 License
 -------

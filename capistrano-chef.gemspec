@@ -4,7 +4,7 @@ require "capistrano/chef/version"
 
 Gem::Specification.new do |s|
   s.name        = "capistrano-chef"
-  s.version     = Capistrano::Chef::VERSION
+  s.version     = CapistranoChef::VERSION.dup
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
   s.authors     = ['Nathan L Smith']

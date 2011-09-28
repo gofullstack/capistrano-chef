@@ -4,7 +4,7 @@ require "capistrano/chef/version"
 
 Gem::Specification.new do |s|
   s.name        = "capistrano-chef"
-  s.version     = Capistrano::Chef::VERSION
+  s.version     = CapistranoChef::VERSION.dup
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
   s.authors     = ['Nathan L Smith']
@@ -19,5 +19,6 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.requirements  = ['capistrano ~> 2.8.0', 'chef ~> 0.10.4']
+  s.add_dependency 'capistrano', '~> 2.8.0'
+  s.add_dependency 'chef', '~> 0.10.4'
 end

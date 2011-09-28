@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Nathan L Smith']
   s.email       = ['nlloyds@gmail.com']
   s.homepage    = "https://github.com/cramerdev/capistrano-chef"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Capistrano extensions for Chef integration}
+  s.description = %q{Allows capistrano to use Chef data for deployment}
 
   s.rubyforge_project = "capistrano-chef"
 
@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.requirements  = [['capistrano', '~> 2.1']]
+  s.requirements  = ['capistrano ~> 2.8.0', 'chef ~> 0.10.4']
 end

@@ -1,5 +1,3 @@
-require 'capistrano' 
-
-class Capistrano::Chef
-  VERSION = '0.0.1'
+module CapistranoChef
+  VERSION = '0.0.1'.freeze
 end

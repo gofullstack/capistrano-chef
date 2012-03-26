@@ -1,4 +1,10 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in capistrano-chef.gemspec
+group :test do
+  gem 'rake'
+  gem 'rspec'
+  gem 'capistrano-spec'
+  gem 'guard-rspec'
+end
+
 gemspec

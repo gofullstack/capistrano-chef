@@ -1,41 +1,41 @@
-capistrano-chef
-===============
+# Capistrano Chef
 
 A common use-case for applications is to have [Chef](http://www.opscode.com/chef/) configure your systems and use [Capistrano](http://capify.org/) to deploy the applications that run on them.
+
+Capistrano Chef is a Capistrano extension that makes Chef and Capistrano get along like best buds.
+
+## Roles
+
 
 The Capistrano configuration has a facility to specify the roles for your application and which servers are members of those roles. Chef has its own roles. If you're using both Chef and Capistrano, you don't want to have to tell them both about which servers you'll be deploying to, especially if they change often.
 
 capistrano-chef provides some helpers to query your Chef server from Capistrano to define these roles.
 
-Examples
---------
+### Examples
 
 A normal `deploy.rb` in an app using capistrano defines a roles like this:
 
-    role :web, 10.0.0.1, 10.0.0.2
-    role :db, 10.0.0.3, :primary => true
+    role :web, '10.0.0.2', '10.0.0.3'
+    role :db, '10.0.0.2', :primary => true
 
 Using capistrano-chef, you can do this:
 
     require 'capistrano/chef'
-    chef_role :web "roles:web"
-    chef_role :db, "roles:database_master", :primary => true,
+    chef_role :web 'roles:web'
+    chef_role :db, 'roles:database_master', :primary => true,
                                             :attribute => :private_ip
 
 This defines the same roles using Chef's [search feature](http://wiki.opscode.com/display/chef/Search). Nodes are searched using the given query. The node's `ipaddress` attribute is used by default, but another (top-level) attribute can be specified in the options. The rest of the options are the same as those used by Capistrano.
 
-Chef configuration options are loaded by [Knife](http://wiki.opscode.com/display/chef/Knifehttp://wiki.opscode.com/display/chef/Knife), looking for `.chef/knife.rb` in the current directory or one its parent directories. 
+## Chef Configuration
 
-To generate this file, run the following from the root of your project:  
+A Chef server is expected to be available and [Knife](http://wiki.opscode.com/display/chef/Knife) is used to configure the extension, looking for knife.rb the keys needed in .chef in the current directory or one its parent directories.
 
-    $ knife configure -i 
+If you're using [Opscode Hosted Chef](http://www.opscode.com/hosted-chef/) these files will be provided for you. If not, the configuration can be generated with `knife configure -i`. See the [Chef Documentation](http://wiki.opscode.com/display/chef/Chef+Repository#ChefRepository-Configuration) for more details.
 
+## License
 
-
-License
--------
-
-Copyright (c) 2011 Cramer Development, Inc.
+Copyright (c) 2011-2012 Cramer Development, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

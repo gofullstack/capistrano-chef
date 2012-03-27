@@ -25,5 +25,5 @@ module Capistrano::Chef
 end
 
 if Capistrano::Configuration.instance
-  Capistrano::Chef.load_into(Capistrano::Confiruation.instance)
+  Capistrano::Chef.load_into(Capistrano::Configuration.instance)
 end

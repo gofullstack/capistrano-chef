@@ -1,5 +1,7 @@
 # Capistrano Chef
 
+[![Build Status](https://secure.travis-ci.org/cramerdev/capistrano-chef.png?branch=master)](http://travis-ci.org/cramerdev/capistrano-chef)
+
 A common use-case for applications is to have [Chef](http://www.opscode.com/chef/) configure your systems and use [Capistrano](http://capify.org/) to deploy the applications that run on them.
 
 Capistrano Chef is a Capistrano extension that makes Chef and Capistrano get along like best buds.
@@ -32,6 +34,10 @@ This defines the same roles using Chef's [search feature](http://wiki.opscode.co
 A Chef server is expected to be available and [Knife](http://wiki.opscode.com/display/chef/Knife) is used to configure the extension, looking for knife.rb the keys needed in .chef in the current directory or one its parent directories.
 
 If you're using [Opscode Hosted Chef](http://www.opscode.com/hosted-chef/) these files will be provided for you. If not, the configuration can be generated with `knife configure -i`. See the [Chef Documentation](http://wiki.opscode.com/display/chef/Chef+Repository#ChefRepository-Configuration) for more details.
+
+## Requirements
+
+Tested with Ruby Enterprise Edition 1.8.7, Ruby 1.9.2 and 1.9.3. Should work with Capistrano 2 or greater.
 
 ## License
 

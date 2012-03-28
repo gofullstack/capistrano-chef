@@ -1,5 +1,6 @@
 require 'capistrano'
 require 'chef/knife'
+require 'chef/data_bag_item'
 require 'chef/search/query'
 
 module Capistrano::Chef
@@ -20,6 +21,10 @@ module Capistrano::Chef
     Chef::Search::Query.new.search(:node, query)[0].map {|n| n[attr] }
   end
 
+  def self.get_apps_data_bag_item(id)
+    Chef::DataBagItem.load(:apps, id).raw_data
+  end
+
   # Load into Capistrano
   def self.load_into(configuration)
     self.configure_chef
@@ -27,6 +32,13 @@ module Capistrano::Chef
     configuration.load do
       def chef_role(name, query = '*:*', options = {})
         role name, *capistrano_chef.search_chef_nodes(query), options
+      end
+
+      def set_from_data_bag
+        raise ':application must be set' if fetch(:application).nil?
+        capistrano_chef.get_apps_data_bag_item(application).each do |k, v|
+          set k, v
+        end
       end
     end
   end

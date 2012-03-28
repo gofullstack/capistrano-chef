@@ -12,6 +12,14 @@ describe Capistrano::Chef do
     # Load into capistrano configuration
     @configuration = Capistrano::Configuration.new
     Capistrano::Chef.load_into(@configuration)
+
+    # Data bag item
+    @item = mock('Chef::DataBagItem')
+    Chef::DataBagItem.stub(:load).and_return @item
+    @item.stub(:raw_data).and_return Mash.new({
+      :id        => 'test',
+      :deploy_to => '/dev/null'
+    })
   end
 
   it 'should be a module' do
@@ -24,6 +32,21 @@ describe Capistrano::Chef do
     Chef::Search::Query.stub!(:new).and_return(@search)
     @search.stub!(:search).and_return([[{ :ipaddress => '10.0.0.2' }], 0, 1])
     Capistrano::Chef.search_chef_nodes('*:*').should eql ['10.0.0.2']
+  end
+
+  specify 'get_apps_data_bag_item' do
+    Capistrano::Chef.get_apps_data_bag_item('test').should === Mash.new({
+      :id        => 'test',
+      :deploy_to => '/dev/null'
+    })
+  end
+
+  specify 'set_from_data_bag' do
+    expect { @configuration.set_from_data_bag }.to raise_error
+    @configuration.set(:application, 'test')
+    @configuration.set_from_data_bag
+    @configuration.fetch(:deploy_to).should === '/dev/null'
+    @configuration.fetch(:id).should === 'test'
   end
 
   specify 'chef_role' do

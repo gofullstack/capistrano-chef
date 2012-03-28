@@ -1,13 +1,10 @@
-# Capistrano Chef
-
-[![Build Status](https://secure.travis-ci.org/cramerdev/capistrano-chef.png?branch=master)](http://travis-ci.org/cramerdev/capistrano-chef)
+# Capistrano Chef [![Build Status](https://secure.travis-ci.org/cramerdev/capistrano-chef.png?branch=master)](http://travis-ci.org/cramerdev/capistrano-chef)
 
 A common use-case for applications is to have [Chef](http://www.opscode.com/chef/) configure your systems and use [Capistrano](http://capify.org/) to deploy the applications that run on them.
 
 Capistrano Chef is a Capistrano extension that makes Chef and Capistrano get along like best buds.
 
 ## Roles
-
 
 The Capistrano configuration has a facility to specify the roles for your application and which servers are members of those roles. Chef has its own roles. If you're using both Chef and Capistrano, you don't want to have to tell them both about which servers you'll be deploying to, especially if they change often.
 
@@ -28,6 +25,41 @@ Using capistrano-chef, you can do this:
                                             :attribute => :private_ip
 
 This defines the same roles using Chef's [search feature](http://wiki.opscode.com/display/chef/Search). Nodes are searched using the given query. The node's `ipaddress` attribute is used by default, but another (top-level) attribute can be specified in the options. The rest of the options are the same as those used by Capistrano.
+
+## Data Bags
+
+Chef [Data Bags](http://wiki.opscode.com/display/chef/Data+Bags) let you store arbitrary JSON data. A common pattern is to use an _apps_ data bag to store data about an application for use in configuration and deployment.
+
+Chef also has a [Deploy Resource](http://wiki.opscode.com/display/chef/Deploy+Resource) described in on of their blog posts, [Data Driven Application Deployment with Chef](http://www.opscode.com/blog/2010/05/06/data-driven-application-deployment-with-chef/). This is one method of deploying, but, if you're reading this, you're probably interested in deploying with Capistrano.
+
+If you create an _apps_ data bag item (let's call it _myapp_), Capistrano Chef will let you use the data in your Capistrano recipes with the `set_from_data_bag` method.
+
+This will allow you to store all of your metadata about your app in one place.
+
+### Example
+
+In normal Capistrano `deploy.rb`:
+
+    set :application, 'myapp'
+    set :user, 'myapp'
+    set :deploy_to, '/var/apps/myapp'
+    set :scm, :git
+    ... # and so on
+
+With Capistrano Chef, an _apps_ data bag item:
+
+    {
+        "id": "myapp",
+        "user": "myapp",
+        "deploy_to": "/var/apps/myapp",
+        "scm": "git",
+        ... // and so on
+    }
+
+And in the`deploy.rb`:
+
+    set :application, 'myapp'
+    set_from_data_bag
 
 ## Chef Configuration
 

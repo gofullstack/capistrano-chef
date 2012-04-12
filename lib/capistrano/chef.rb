@@ -31,7 +31,7 @@ module Capistrano::Chef
     configuration.set :capistrano_chef, self
     configuration.load do
       def chef_role(name, query = '*:*', options = {})
-        role name, *capistrano_chef.search_chef_nodes(query), options
+        role name, *(capistrano_chef.search_chef_nodes(query) + [options])
       end
 
       def set_from_data_bag

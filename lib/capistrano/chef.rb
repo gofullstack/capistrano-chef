@@ -14,11 +14,23 @@ module Capistrano::Chef
 
   # Do a search on the Chef server and return an attary of the requested
   # matching attributes
-  def self.search_chef_nodes(query = '*:*', options = {})
-    # TODO: This can only get a node's top-level attributes. Make it get nested
-    # ones.
-    attr = options.delete(:attribute) || :ipaddress
-    Chef::Search::Query.new.search(:node, query)[0].map {|n| n[attr] }
+  def self.search_chef_nodes(query = '*:*', arg = :ipaddress)
+    search_proc = \
+      case arg
+      when Proc
+        arg
+      when Hash
+        iface, family = arg.keys.first.to_s, arg.values.first.to_s
+        Proc.new do |n|
+          addresses = n["network"]["interfaces"][iface]["addresses"]
+          addresses.select{|address, data| data["family"] == family }[0][0]
+        end
+      when Symbol, String
+        Proc.new{|n| n[arg.to_s]}
+      else
+        raise ArgumentError, 'Search arguments must be Proc, Hash, Symbol, String.'
+      end
+    Chef::Search::Query.new.search(:node, query)[0].map{|n| search_proc.call(n) }
   end
 
   def self.get_apps_data_bag_item(id)
@@ -31,7 +43,7 @@ module Capistrano::Chef
     configuration.set :capistrano_chef, self
     configuration.load do
       def chef_role(name, query = '*:*', options = {})
-        role name, *(capistrano_chef.search_chef_nodes(query) + [options])
+        role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute)) + [options])
       end
 
       def set_from_data_bag

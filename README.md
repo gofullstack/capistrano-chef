@@ -24,6 +24,18 @@ Using capistrano-chef, you can do this:
     chef_role :db, 'roles:database_master', :primary => true,
                                             :attribute => :private_ip
 
+Use Hash to get the specific network interface: 
+(Hash must be {'interface-name' => 'network-family-name'})
+
+    chef_role :web, 'roles:web', :attribute => {:eth1 => :inet}
+
+More deep and complex attributes search, user Proc object:
+(sample to get 'eth1 inet ipaddress': http://wiki.opscode.com/display/chef/Search#Search-SearchonlyreturnsIPAddressoftheNode%2Cnotofaspecificinterface )
+
+    chef_role :web, 'roles:web', :attribute => Proc.new do |n|
+      n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }[0][0] 
+    end
+
 This defines the same roles using Chef's [search feature](http://wiki.opscode.com/display/chef/Search). Nodes are searched using the given query. The node's `ipaddress` attribute is used by default, but another (top-level) attribute can be specified in the options. The rest of the options are the same as those used by Capistrano.
 
 ## Data Bags

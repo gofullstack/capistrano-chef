@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'capistrano/chef'
 
-MOCK_NODE_DATA = [
+MOCK_NODE_DATA = [{
   "ipaddress" => '10.0.0.2',
   "fqdn" => 'localhost.localdomain',
   "hostname" => 'localhost',
@@ -30,8 +30,7 @@ MOCK_NODE_DATA = [
       },
     },
   }
-
-]
+}]
 
 describe Capistrano::Chef do
   before do
@@ -84,7 +83,7 @@ describe Capistrano::Chef do
     # use Proc for more deep, complex attributes search.
     specify 'with Proc argument' do
       search_proc = Proc.new do |n|
-        n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }[0][0]
+        n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }.keys.first
       end
       Capistrano::Chef.search_chef_nodes('*:*', search_proc).should eql ['192.168.77.101']
     end

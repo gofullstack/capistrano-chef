@@ -23,14 +23,14 @@ module Capistrano::Chef
         iface, family = arg.keys.first.to_s, arg.values.first.to_s
         Proc.new do |n|
           addresses = n["network"]["interfaces"][iface]["addresses"]
-          addresses.select{|address, data| data["family"] == family }[0][0]
+          addresses.select{|address, data| data["family"] == family }.keys.first
         end
       when Symbol, String
         Proc.new{|n| n[arg.to_s]}
       else
         raise ArgumentError, 'Search arguments must be Proc, Hash, Symbol, String.'
       end
-    Chef::Search::Query.new.search(:node, query)[0].map{|n| search_proc.call(n) }
+    Chef::Search::Query.new.search(:node, query)[0].map(&search_proc)
   end
 
   def self.get_apps_data_bag_item(id)

@@ -74,6 +74,8 @@ And in the`deploy.rb`:
     set :application, 'myapp'
     set_from_data_bag
 
+If you want to use a data bag other than _apps_, you can do `set_from_data_bag :my_other_data_bag`.
+
 ## Chef Configuration
 
 A Chef server is expected to be available and [Knife](http://wiki.opscode.com/display/chef/Knife) is used to configure the extension, looking for knife.rb the keys needed in .chef in the current directory or one its parent directories.

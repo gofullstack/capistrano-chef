@@ -33,8 +33,8 @@ module Capistrano::Chef
     Chef::Search::Query.new.search(:node, query)[0].map(&search_proc)
   end
 
-  def self.get_apps_data_bag_item(id, databag=:apps)
-    Chef::DataBagItem.load(databag, id).raw_data
+  def self.get_data_bag_item(id, data_bag = :apps)
+    Chef::DataBagItem.load(data_bag, id).raw_data
   end
 
   # Load into Capistrano
@@ -46,9 +46,9 @@ module Capistrano::Chef
         role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute)) + [options])
       end
 
-      def set_from_data_bag(databag=:apps)
+      def set_from_data_bag(data_bag = :apps)
         raise ':application must be set' if fetch(:application).nil?
-        capistrano_chef.get_apps_data_bag_item(application, databag).each do |k, v|
+        capistrano_chef.get_data_bag_item(application, data_bag).each do |k, v|
           set k, v
         end
       end

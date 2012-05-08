@@ -44,9 +44,16 @@ describe Capistrano::Chef do
     @configuration = Capistrano::Configuration.new
     Capistrano::Chef.load_into(@configuration)
 
-    # Data bag item
+    # Data bag items
+    @other_item = mock('Chef::DataBagItem')
+    Chef::DataBagItem.stub(:load).with(:other_data_bag, 'other_test').and_return @other_item
+    @other_item.stub(:raw_data).and_return Mash.new({
+      :id        => 'other_test',
+      :deploy_to => '/dev/other_null'
+    })
+
     @item = mock('Chef::DataBagItem')
-    Chef::DataBagItem.stub(:load).and_return @item
+    Chef::DataBagItem.stub(:load).with(:apps, 'test').and_return @item
     @item.stub(:raw_data).and_return Mash.new({
       :id        => 'test',
       :deploy_to => '/dev/null'
@@ -90,10 +97,14 @@ describe Capistrano::Chef do
   end
 
 
-  specify 'get_apps_data_bag_item' do
-    Capistrano::Chef.get_apps_data_bag_item('test').should === Mash.new({
+  specify 'get_data_bag_item' do
+    Capistrano::Chef.get_data_bag_item('test').should === Mash.new({
       :id        => 'test',
       :deploy_to => '/dev/null'
+    })
+    Capistrano::Chef.get_data_bag_item('other_test', :other_data_bag).should === Mash.new({
+      :id        => 'other_test',
+      :deploy_to => '/dev/other_null'
     })
   end
 
@@ -103,6 +114,11 @@ describe Capistrano::Chef do
     @configuration.set_from_data_bag
     @configuration.fetch(:deploy_to).should === '/dev/null'
     @configuration.fetch(:id).should === 'test'
+
+    @configuration.set(:application, 'other_test')
+    @configuration.set_from_data_bag :other_data_bag
+    @configuration.fetch(:deploy_to).should === '/dev/other_null'
+    @configuration.fetch(:id).should === 'other_test'
   end
 
   specify 'chef_role' do

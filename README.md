@@ -21,8 +21,9 @@ Using capistrano-chef, you can do this:
 
     require 'capistrano/chef'
     chef_role :web 'roles:web'
-    chef_role :db, 'roles:database_master', :primary => true,
-                                            :attribute => :private_ip
+    chef_role :db, 'roles:database_master', :primary   => true,
+                                            :attribute => :private_ip,
+                                            :limit     => 1
 
 Use a Hash to get a specific network interface:
 (the Hash must be in the form of { 'interface-name' => 'network-family-name' })
@@ -38,6 +39,8 @@ For a more deep and complex attribute search, use a Proc object:
     end
 
 This defines the same roles using Chef's [search feature](http://wiki.opscode.com/display/chef/Search). Nodes are searched using the given query. The node's `ipaddress` attribute is used by default, but other attributes can be specified in the options as shown in the examples above. The rest of the options are the same as those used by Capistrano.
+
+The `limit` attribute of the options hash will make it so only that the given number of items will be returned from a search.
 
 ## Data Bags
 

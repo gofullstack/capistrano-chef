@@ -14,7 +14,7 @@ module Capistrano::Chef
 
   # Do a search on the Chef server and return an attary of the requested
   # matching attributes
-  def self.search_chef_nodes(query = '*:*', arg = :ipaddress)
+  def self.search_chef_nodes(query = '*:*', arg = :ipaddress, limit = 1000)
     search_proc = \
       case arg
       when Proc
@@ -30,7 +30,7 @@ module Capistrano::Chef
       else
         raise ArgumentError, 'Search arguments must be Proc, Hash, Symbol, String.'
       end
-    Chef::Search::Query.new.search(:node, query)[0].map(&search_proc)
+    Chef::Search::Query.new.search(:node, query, 'X_CHEF_id_CHEF_X asc', 0, limit)[0].map(&search_proc)
   end
 
   def self.get_data_bag_item(id, data_bag = :apps)
@@ -43,7 +43,7 @@ module Capistrano::Chef
     configuration.set :capistrano_chef, self
     configuration.load do
       def chef_role(name, query = '*:*', options = {})
-        role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute)) + [options])
+        role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute), options.delete(:limit)) + [options])
       end
 
       def set_from_data_bag(data_bag = :apps)

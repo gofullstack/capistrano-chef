@@ -46,7 +46,7 @@ The `limit` attribute of the options hash will make it so only that the given nu
 
 Chef [Data Bags](http://wiki.opscode.com/display/chef/Data+Bags) let you store arbitrary JSON data. A common pattern is to use an _apps_ data bag to store data about an application for use in configuration and deployment.
 
-Chef also has a [Deploy Resource](http://wiki.opscode.com/display/chef/Deploy+Resource) described in on of their blog posts, [Data Driven Application Deployment with Chef](http://www.opscode.com/blog/2010/05/06/data-driven-application-deployment-with-chef/). This is one method of deploying, but, if you're reading this, you're probably interested in deploying with Capistrano.
+Chef also has a [Deploy Resource](http://wiki.opscode.com/display/chef/Deploy+Resource) described in one of their blog posts, [Data Driven Application Deployment with Chef](http://www.opscode.com/blog/2010/05/06/data-driven-application-deployment-with-chef/). This is one method of deploying, but, if you're reading this, you're probably interested in deploying with Capistrano.
 
 If you create an _apps_ data bag item (let's call it _myapp_), Capistrano Chef will let you use the data in your Capistrano recipes with the `set_from_data_bag` method.
 

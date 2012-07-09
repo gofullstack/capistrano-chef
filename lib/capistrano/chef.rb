@@ -37,6 +37,10 @@ module Capistrano::Chef
     Chef::DataBagItem.load(data_bag, id).raw_data
   end
 
+  def self.get_encrypted_data_bag_item(id, data_bag = :apps, secret = nil)
+    Chef::EncryptedDataBagItem.load(data_bag, id, secret).to_hash
+  end
+
   # Load into Capistrano
   def self.load_into(configuration)
     self.configure_chef
@@ -49,6 +53,13 @@ module Capistrano::Chef
       def set_from_data_bag(data_bag = :apps)
         raise ':application must be set' if fetch(:application).nil?
         capistrano_chef.get_data_bag_item(application, data_bag).each do |k, v|
+          set k, v
+        end
+      end
+
+      def set_from_encrypted_data_bag(data_bag = :apps, secret = nil)
+        raise ':application must be set' if fetch(:application).nil?
+        capistrano_chef.get_encrypted_data_bag_item(application, data_bag, secret).each do |k, v|
           set k, v
         end
       end

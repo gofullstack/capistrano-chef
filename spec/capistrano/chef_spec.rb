@@ -64,7 +64,6 @@ describe Capistrano::Chef do
     expect { described_class.to be_a Module }
   end
 
-
   describe 'search_chef_nodes' do
     before(:each) do
       Chef::Knife.new.configure_chef
@@ -90,7 +89,7 @@ describe Capistrano::Chef do
     # use Proc for more deep, complex attributes search.
     specify 'with Proc argument' do
       search_proc = Proc.new do |n|
-        n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }.keys.first
+        n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }.to_a.first.first
       end
       Capistrano::Chef.search_chef_nodes('*:*', search_proc).should eql ['192.168.77.101']
     end
@@ -121,13 +120,35 @@ describe Capistrano::Chef do
     @configuration.fetch(:id).should === 'other_test'
   end
 
-  specify 'chef_role' do
-    Capistrano::Chef.stub!(:search_chef_nodes).and_return(['10.0.0.2'])
-    @search = mock('Chef::Search::Query')
-    @configuration.should respond_to :chef_role
+  describe '#chef_role' do
+    it 'add nodes to the role' do
+      Capistrano::Chef.stub!(:search_chef_nodes).and_return(['10.0.0.2'])
+      @search = mock('Chef::Search::Query')
+      @configuration.should respond_to :chef_role
 
-    @configuration.chef_role(:test)
-    @configuration.roles.should have_key :test
-    @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'
+      @configuration.chef_role(:test)
+      @configuration.roles.should have_key :test
+      @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'
+    end
+
+    it 'defaults to calling search with :ipaddress as the attribute and 1000 as the limit when giving a query' do
+      query = "this is my chef query"
+      Capistrano::Chef.should_receive(:search_chef_nodes).with(query, :ipaddress, 1000).and_return(['10.0.0.2'])
+      @configuration.chef_role(:test, query)
+    end
+
+    it 'allows you to specify the attribute used in the query' do
+      query = "this is my chef query"
+      attribute = :my_attr
+      Capistrano::Chef.should_receive(:search_chef_nodes).with(query, attribute, 1000).and_return(['10.0.0.2'])
+      @configuration.chef_role(:test, query, :attribute => attribute)
+    end
+
+    it 'allows you to specify the limit used in the query' do
+      query = "this is my chef query"
+      limit = 55
+      Capistrano::Chef.should_receive(:search_chef_nodes).with(query, :ipaddress, limit).and_return(['10.0.0.2'])
+      @configuration.chef_role(:test, query, :limit => limit)
+    end
   end
 end

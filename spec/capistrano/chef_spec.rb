@@ -89,7 +89,7 @@ describe Capistrano::Chef do
     # use Proc for more deep, complex attributes search.
     specify 'with Proc argument' do
       search_proc = Proc.new do |n|
-        n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }.keys.first
+        n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }.to_a.first.first
       end
       Capistrano::Chef.search_chef_nodes('*:*', search_proc).should eql ['192.168.77.101']
     end

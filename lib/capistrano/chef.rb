@@ -23,7 +23,7 @@ module Capistrano::Chef
         iface, family = arg.keys.first.to_s, arg.values.first.to_s
         Proc.new do |n|
           addresses = n["network"]["interfaces"][iface]["addresses"]
-          addresses.select{|address, data| data["family"] == family }.keys.first
+          addresses.select{|address, data| data["family"] == family }.to_a.first.first
         end
       when Symbol, String
         Proc.new{|n| n[arg.to_s]}
@@ -47,6 +47,7 @@ module Capistrano::Chef
     configuration.set :capistrano_chef, self
     configuration.load do
       def chef_role(name, query = '*:*', options = {})
+        options = {:attribute => :ipaddress, :limit => 1000}.merge(options)
         role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute), options.delete(:limit)) + [options])
       end
 

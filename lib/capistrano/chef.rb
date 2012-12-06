@@ -48,7 +48,12 @@ module Capistrano::Chef
     configuration.load do
       def chef_role(name, query = '*:*', options = {})
         options = {:attribute => :ipaddress, :limit => 1000}.merge(options)
-        role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute), options.delete(:limit)) + [options])
+        # Don't do the lookup if HOSTS is used.
+        # Allows deployment from knifeless machine
+        # to specific hosts (ie. developent, staging)
+        unless ENV['HOSTS']
+          role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute), options.delete(:limit)) + [options])
+        end
       end
 
       def set_from_data_bag(data_bag = :apps)

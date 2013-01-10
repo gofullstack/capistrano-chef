@@ -38,7 +38,6 @@ describe Capistrano::Chef do
     @knife = mock('Chef::Knife')
     Chef::Knife.stub!(:new).and_return(@knife)
     @knife.stub!(:configure_chef)
-    @knife.stub!(:config=)
 
     # Load into capistrano configuration
     @configuration = Capistrano::Configuration.new

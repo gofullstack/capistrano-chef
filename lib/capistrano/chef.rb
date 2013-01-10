@@ -8,7 +8,7 @@ module Capistrano::Chef
   def self.configure_chef
     knife = Chef::Knife.new
     # If you don't do this it gets thrown into debug mode
-    knife.config = { :verbosity => 1 }
+    Chef::Config[:verbosity] = 1 # :info
     knife.configure_chef
   end
 

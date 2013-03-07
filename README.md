@@ -44,9 +44,7 @@ The `limit` attribute of the options hash will make it so only that the given nu
 
 You can also define multiple roles at the same time if the host list is identical. Instead of running multiple searches to the Chef server, you can pass an Array to `chef_role`:
 
-    chef_role [:web, :app], 'roles:web', :attribute => Proc.new do |n|
-	  n["network"]["interfaces"]["eth1"]["addresses"].select{|address, data| data["family"] == "inet" }.keys.first
-	end
+    chef_role [:web, :app], 'roles:web'
 
 ## Data Bags
 

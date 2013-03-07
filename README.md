@@ -42,6 +42,10 @@ This defines the same roles using Chef's [search feature](http://wiki.opscode.co
 
 The `limit` attribute of the options hash will make it so only that the given number of items will be returned from a search.
 
+You can also define multiple roles at the same time if the host list is identical. Instead of running multiple searches to the Chef server, you can pass an Array to `chef_role`:
+
+    chef_role [:web, :app], 'roles:web'
+
 ## Data Bags
 
 Chef [Data Bags](http://wiki.opscode.com/display/chef/Data+Bags) let you store arbitrary JSON data. A common pattern is to use an _apps_ data bag to store data about an application for use in configuration and deployment.

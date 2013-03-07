@@ -120,14 +120,31 @@ describe Capistrano::Chef do
   end
 
   describe '#chef_role' do
-    it 'add nodes to the role' do
-      Capistrano::Chef.stub!(:search_chef_nodes).and_return(['10.0.0.2'])
-      @search = mock('Chef::Search::Query')
-      @configuration.should respond_to :chef_role
+    context 'when adding nodes to the role' do
+      before do
+        Capistrano::Chef.stub!(:search_chef_nodes).and_return(['10.0.0.2'])
+        @search = mock('Chef::Search::Query')
+      end
 
-      @configuration.chef_role(:test)
-      @configuration.roles.should have_key :test
-      @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'
+      it 'add nodes to one role' do
+        @configuration.should respond_to :chef_role
+        @configuration.chef_role(:test)
+        @configuration.roles.should have_key :test
+        @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'
+      end
+
+      it 'supports defining multiple roles in one go to avoid multiple searches' do
+        @configuration.chef_role([:test, :test2])
+        @configuration.roles.should have_key :test
+        @configuration.roles.should have_key :test2
+        @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'
+        @configuration.roles[:test2].to_a[0].host.should === '10.0.0.2'
+      end
+
+      it 'does not call search more than once when defining multiple Cap roles' do
+        Capistrano::Chef.should_receive(:search_chef_nodes).once
+        @configuration.chef_role([:test, :test2])
+      end
     end
 
     it 'defaults to calling search with :ipaddress as the attribute and 1000 as the limit when giving a query' do

@@ -140,6 +140,11 @@ describe Capistrano::Chef do
         @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'
         @configuration.roles[:test2].to_a[0].host.should === '10.0.0.2'
       end
+
+      it 'does not call search more than once when defining multiple Cap roles' do
+        Capistrano::Chef.should_receive(:search_chef_nodes).once
+        @configuration.chef_role([:test, :test2])
+      end
     end
 
     it 'defaults to calling search with :ipaddress as the attribute and 1000 as the limit when giving a query' do

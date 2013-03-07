@@ -124,10 +124,10 @@ describe Capistrano::Chef do
       before do
         Capistrano::Chef.stub!(:search_chef_nodes).and_return(['10.0.0.2'])
         @search = mock('Chef::Search::Query')
-        @configuration.should respond_to :chef_role
       end
 
       it 'add nodes to one role' do
+        @configuration.should respond_to :chef_role
         @configuration.chef_role(:test)
         @configuration.roles.should have_key :test
         @configuration.roles[:test].to_a[0].host.should === '10.0.0.2'

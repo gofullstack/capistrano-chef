@@ -52,7 +52,12 @@ module Capistrano::Chef
         # Allows deployment from knifeless machine
         # to specific hosts (ie. developent, staging)
         unless ENV['HOSTS']
-          role name, *(capistrano_chef.search_chef_nodes(query, options.delete(:attribute), options.delete(:limit)) + [options])
+          hosts = capistrano_chef.search_chef_nodes(query, options.delete(:attribute), options.delete(:limit)) + [options]
+          if name.is_a?(Array)
+            name.each { |n| role n, *hosts }
+          else
+            role name, *hosts
+          end
         end
       end
 

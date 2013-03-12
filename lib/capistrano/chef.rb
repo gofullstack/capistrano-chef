@@ -30,7 +30,7 @@ module Capistrano::Chef
       else
         raise ArgumentError, 'Search arguments must be Proc, Hash, Symbol, String.'
       end
-    Chef::Search::Query.new.search(:node, query, 'X_CHEF_id_CHEF_X asc', 0, limit)[0].map(&search_proc)
+    Chef::Search::Query.new.search(:node, query, 'X_CHEF_id_CHEF_X asc', 0, limit)[0].compact.map(&search_proc)
   end
 
   def self.get_data_bag_item(id, data_bag = :apps)

@@ -1,36 +1,39 @@
 require 'spec_helper'
 require 'capistrano/chef'
 
-MOCK_NODE_DATA = [{
-  "ipaddress" => '10.0.0.2',
-  "fqdn" => 'localhost.localdomain',
-  "hostname" => 'localhost',
-  "network" => {
-    "default_interface" => "eth0",
-    "interfaces" => {
-      "eth0" => {
-        "addresses" => {
-          "fe80::a00:27ff:feca:ab08" => {"scope" => "Link", "prefixlen" => "64", "family" => "inet6"},
-          "10.0.0.2" => {"netmask" => "255.255.255.0", "broadcast" => "10.0.0.255", "family" => "inet"},
-          "08:00:27:CA:AB:08" => {"family" => "lladdr"}
+MOCK_NODE_DATA = [
+  {
+    "ipaddress" => '10.0.0.2',
+    "fqdn" => 'localhost.localdomain',
+    "hostname" => 'localhost',
+    "network" => {
+      "default_interface" => "eth0",
+      "interfaces" => {
+        "eth0" => {
+          "addresses" => {
+            "fe80::a00:27ff:feca:ab08" => {"scope" => "Link", "prefixlen" => "64", "family" => "inet6"},
+            "10.0.0.2" => {"netmask" => "255.255.255.0", "broadcast" => "10.0.0.255", "family" => "inet"},
+            "08:00:27:CA:AB:08" => {"family" => "lladdr"}
+          },
+        },
+        "lo" => {
+          "addresses" => {
+            "::1" => {"scope" => "Node", "prefixlen" => "128", "family" => "inet6"},
+            "127.0.0.1" => {"netmask" => "255.0.0.0", "family" => "inet"}
+          },
+        },
+        "eth1" => {
+          "addresses" => {
+            "fe80::a00:27ff:fe79:83fc" => {"scope" => "Link", "prefixlen" => "64", "family" => "inet6"},
+            "192.168.77.101" => {"netmask" => "255.255.255.0", "broadcast" => "192.168.77.255", "family" => "inet"},
+            "08:00:27:79:83:FC" => {"family" => "lladdr"}
+          },
         },
       },
-      "lo" => {
-        "addresses" => {
-          "::1" => {"scope" => "Node", "prefixlen" => "128", "family" => "inet6"},
-          "127.0.0.1" => {"netmask" => "255.0.0.0", "family" => "inet"}
-        },
-      },
-      "eth1" => {
-        "addresses" => {
-          "fe80::a00:27ff:fe79:83fc" => {"scope" => "Link", "prefixlen" => "64", "family" => "inet6"},
-          "192.168.77.101" => {"netmask" => "255.255.255.0", "broadcast" => "192.168.77.255", "family" => "inet"},
-          "08:00:27:79:83:FC" => {"family" => "lladdr"}
-        },
-      },
-    },
-  }
-}]
+    }
+  },
+  nil
+]
 
 describe Capistrano::Chef do
   before do

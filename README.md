@@ -91,7 +91,7 @@ If you're using [Opscode Hosted Chef](http://www.opscode.com/hosted-chef/) these
 
 ## Requirements
 
-Tested with Ruby Enterprise Edition 1.8.7, Ruby 1.9.2 and 1.9.3. Should work with Capistrano 2.
+Tested with Ruby Enterprise Edition Ruby 1.9.3, 2.0.0, and 2.1.0. Should work with Capistrano 2.
 
 ### Capistrano 3 Support
 

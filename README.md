@@ -1,8 +1,10 @@
-# Capistrano Chef [![Build Status](https://secure.travis-ci.org/cramerdev/capistrano-chef.png?branch=master)](http://travis-ci.org/cramerdev/capistrano-chef)
+# Chef For Capistrano 3
 
 A common use-case for applications is to have [Chef](http://www.opscode.com/chef/) configure your systems and use [Capistrano](http://capify.org/) to deploy the applications that run on them.
 
-Capistrano Chef is a Capistrano extension that makes Chef and Capistrano get along like best buds.
+Capistrano Chef is a Capistrano 3 extension that makes Chef and Capistrano 3 get along like best buds.
+
+Note: this gem will not work for Capistrano versions prior to 3.
 
 ## Roles
 
@@ -40,48 +42,9 @@ For a more deep and complex attribute search, use a Proc object:
 
 This defines the same roles using Chef's [search feature](http://wiki.opscode.com/display/chef/Search). Nodes are searched using the given query. The node's `ipaddress` attribute is used by default, but other attributes can be specified in the options as shown in the examples above. The rest of the options are the same as those used by Capistrano.
 
-The `limit` attribute of the options hash will make it so only that the given number of items will be returned from a search.
-
 You can also define multiple roles at the same time if the host list is identical. Instead of running multiple searches to the Chef server, you can pass an Array to `chef_role`:
 
     chef_role [:web, :app], 'roles:web'
-
-## Data Bags
-
-Chef [Data Bags](http://wiki.opscode.com/display/chef/Data+Bags) let you store arbitrary JSON data. A common pattern is to use an _apps_ data bag to store data about an application for use in configuration and deployment.
-
-Chef also has a [Deploy Resource](http://wiki.opscode.com/display/chef/Deploy+Resource) described in one of their blog posts, [Data Driven Application Deployment with Chef](http://www.opscode.com/blog/2010/05/06/data-driven-application-deployment-with-chef/). This is one method of deploying, but, if you're reading this, you're probably interested in deploying with Capistrano.
-
-If you create an _apps_ data bag item (let's call it _myapp_), Capistrano Chef will let you use the data in your Capistrano recipes with the `set_from_data_bag` method.
-
-This will allow you to store all of your metadata about your app in one place.
-
-### Example
-
-In normal Capistrano `deploy.rb`:
-
-    set :application, 'myapp'
-    set :user, 'myapp'
-    set :deploy_to, '/var/apps/myapp'
-    set :scm, :git
-    ... # and so on
-
-With Capistrano Chef, an _apps_ data bag item:
-
-    {
-        "id": "myapp",
-        "user": "myapp",
-        "deploy_to": "/var/apps/myapp",
-        "scm": "git",
-        ... // and so on
-    }
-
-And in the`deploy.rb`:
-
-    set :application, 'myapp'
-    set_from_data_bag
-
-If you want to use a data bag other than _apps_, you can do `set_from_data_bag :my_other_data_bag`.
 
 ## Chef Configuration
 
@@ -89,20 +52,11 @@ A Chef server is expected to be available and [Knife](http://wiki.opscode.com/di
 
 If you're using [Opscode Hosted Chef](http://www.opscode.com/hosted-chef/) these files will be provided for you. If not, the configuration can be generated with `knife configure -i`. See the [Chef Documentation](http://wiki.opscode.com/display/chef/Chef+Repository#ChefRepository-Configuration) for more details.
 
-## Requirements
-
-Tested with Ruby Enterprise Edition Ruby 1.9.3, 2.0.0, and 2.1.0. Should work with Capistrano 2.
-
-### Capistrano 3 Support
-
-Capistrano 3 is not supported at this time. Pull requests that add this support are welcome. Issues related to Capistrano 3 have a "Capistrano 3" label in the issues section on GitHub.
-
 ## License
-
-Copyright (c) 2011-2012 Cramer Development, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

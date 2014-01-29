@@ -4,7 +4,7 @@ A common use-case for applications is to have [Chef](http://www.opscode.com/chef
 
 Capistrano Chef is a Capistrano 3 extension that makes Chef and Capistrano 3 get along like best buds.
 
-Note: this gem will not work for Capistrano versions prior to 3.
+Note: this latest version of this gem will not work for Capistrano versions prior to 3.  Please use [version 0.1.0](http://rubygems.org/gems/capistrano-chef/versions/0.1.0) or earlier if you want to use Capistrano Chef with Capistrano 2.
 
 ## Roles
 

@@ -1,6 +1,6 @@
 # Chef For Capistrano 3
 
-A common use-case for applications is to have [Chef](http://www.opscode.com/chef/) configure your systems and use [Capistrano](http://capify.org/) to deploy the applications that run on them.
+A common use-case for applications is to have [Chef](http://www.opscode.com/chef/) configure your systems and use [Capistrano](http://capistranorb.com/) to deploy the applications that run on them.
 
 Capistrano Chef is a Capistrano 3 extension that makes Chef and Capistrano 3 get along like best buds.
 

@@ -28,8 +28,9 @@ module Capistrano
         name.each { |n| role(name, hosts.map { |h| "#{user ? "#{user}@" : ''}#{h}" }) }
       end
 
-      def chef_search(query)
-        Module.const_get(:Chef)::Search::Query.new.search(:node, query)[0].compact
+      def chef_search(query, options={})
+        index = options.has_key?(:index) ? options.fetch(:index) : :node
+        Module.const_get(:Chef)::Search::Query.new.search(index, query)[0].compact
       end
     end
   end

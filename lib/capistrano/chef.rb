@@ -7,4 +7,3 @@ knife = Chef::Knife.new
 knife.configure_chef
 
 self.extend Capistrano::DSL::Chef
-

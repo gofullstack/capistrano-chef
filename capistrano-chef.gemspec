@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
   s.authors     = ['Ryan Oblak', 'Justin Reagor']
   s.email       = ['rroblak@gmail.com', 'cheapRoc@gmail.com']
-  s.homepage    = "https://github.com/cheapRoc/capistrano-chef"
-  s.summary     = %q{Capistrano 3 extensions for Chef integration}
-  s.description = %q{Allows Capistrano to use Chef data for deployment}
+  s.homepage    = "https://github.com/gofullstack/capistrano-chef"
+  s.summary     = %q{Capistrano 3 extensions for working with Chef}
+  s.description = %q{Allows Capistrano and Chef to work together to script release tasks}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

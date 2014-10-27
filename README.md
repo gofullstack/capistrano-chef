@@ -25,7 +25,7 @@ Using capistrano-chef, you can do this:
     chef_role :web 'role:web'
     chef_role :db, 'role:database_master', :primary   => true,
                                            :attribute => :private_ip,
-                                            :limit     => 1
+                                           :limit     => 1
 
 Use a Hash to get a specific network interface:
 (the Hash must be in the form of { 'interface-name' => 'network-family-name' })

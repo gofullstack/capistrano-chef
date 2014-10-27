@@ -22,9 +22,9 @@ A normal `deploy.rb` in an app using capistrano defines a roles like this:
 Using capistrano-chef, you can do this:
 
     require 'capistrano/chef'
-    chef_role :web 'roles:web'
-    chef_role :db, 'roles:database_master', :primary   => true,
-                                            :attribute => :private_ip,
+    chef_role :web 'role:web'
+    chef_role :db, 'role:database_master', :primary   => true,
+                                           :attribute => :private_ip,
                                             :limit     => 1
 
 Use a Hash to get a specific network interface:

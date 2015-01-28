@@ -1,8 +1,9 @@
 module Capistrano
   module DSL
     module Chef
-      def chef_role(name, query = '*:*', options)
+      def chef_role(name, query = '*:*', options = {})
         arg = options.delete(:attribute) || :ipaddress
+        limit = options.delete(:limit)
 
         search_proc = case arg
                       when Proc
@@ -20,12 +21,13 @@ module Capistrano
                       end
 
         hosts = chef_search(query).map(&search_proc)
+        hosts = hosts.take(limit) if limit
 
         name = [name] unless name.is_a?(Array)
 
         user = fetch(:user)
 
-        name.each { |n| role(name, hosts.map { |h| "#{user ? "#{user}@" : ''}#{h}" }) }
+        name.each { |n| role(name, hosts.map { |h| "#{user ? "#{user}@" : ''}#{h}" }, options) }
       end
 
       def chef_search(query)

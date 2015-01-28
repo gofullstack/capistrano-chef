@@ -27,7 +27,7 @@ module Capistrano
 
         user = fetch(:user)
 
-        name.each { |n| role(name, hosts.map { |h| "#{user ? "#{user}@" : ''}#{h}" }) }
+        name.each { |n| role(name, hosts.map { |h| "#{user ? "#{user}@" : ''}#{h}" }, options) }
       end
 
       def chef_search(query)

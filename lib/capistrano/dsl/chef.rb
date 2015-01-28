@@ -3,6 +3,7 @@ module Capistrano
     module Chef
       def chef_role(name, query = '*:*', options = {})
         arg = options.delete(:attribute) || :ipaddress
+        limit = options.delete(:limit)
 
         search_proc = case arg
                       when Proc
@@ -20,6 +21,7 @@ module Capistrano
                       end
 
         hosts = chef_search(query).map(&search_proc)
+        hosts = hosts.take(limit) if limit
 
         name = [name] unless name.is_a?(Array)
 

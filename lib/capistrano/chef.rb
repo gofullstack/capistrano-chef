@@ -1,4 +1,5 @@
 require 'chef/knife'
+require 'chef/node'
 require 'chef/search/query'
 require 'capistrano/dsl/chef'
 

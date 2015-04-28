@@ -1,7 +1,7 @@
 module Capistrano
   module DSL
     module Chef
-      def chef_role(name, query = '*:*', options)
+      def chef_role(name, query = '*:*', **options)
         arg = options.delete(:attribute) || :ipaddress
 
         search_proc = case arg

@@ -13,8 +13,9 @@ module Capistrano
 
         user = fetch(:user)
 
-        add_proc = options.delete(:add_proc) || proc { |n, hs, usr| role(n, hs.map { |h| "#{usr ? "#{usr}@" : ''}#{h}" }) }
-
+        add_proc = options.delete(:add_proc) || proc do |role_name, all_hosts, ssh_user|
+          role(role_name, all_hosts.map { |host| "#{ssh_user ? "#{ssh_user}@" : ''}#{host}" })
+        end
         name.each { |n| add_proc.call(n, hosts, user) }
       end
 
